@@ -27,6 +27,11 @@ Paleta::Paleta(const std::string& nomeArquivo) {
   this->quantidade = 0;
   this->cores = new Cor[this->tamanho];
 
+  int totalCores = contarCoresArquivo(nomeArquivo);
+  if (totalCores > this->tamanho) {
+    ajustarTamanho(totalCores);
+  }
+
   std::ifstream arquivo(nomeArquivo);
 
   if (!arquivo.is_open()) {
@@ -76,4 +81,36 @@ Cor Paleta::obterCor(int indice) {
   return cores[indice];
 }
 
-// implemente aqui os métodos da classe Paleta, conforme especificado no arquivo de cabeçalho paleta.h
+int Paleta::contarCoresArquivo(const std::string& nomeArquivo) const {
+  std::ifstream arquivo(nomeArquivo);
+
+  if (!arquivo.is_open()) {
+    return 0;
+  }
+
+  int total = 0;
+  std::string linha;
+  while (std::getline(arquivo, linha)) {
+    if (linha.size() >= 7 && linha[0] == '#') {
+      total++;
+    }
+  }
+
+  arquivo.close();
+  return total;
+}
+
+void Paleta::ajustarTamanho(int novoTamanho) {
+  if (novoTamanho <= this->tamanho) {
+    return;
+  }
+
+  Cor* novoCores = new Cor[novoTamanho];
+  for (int i = 0; i < this->quantidade; i++) {
+    novoCores[i] = this->cores[i];
+  }
+
+  delete[] this->cores;
+  this->cores = novoCores;
+  this->tamanho = novoTamanho;
+}
