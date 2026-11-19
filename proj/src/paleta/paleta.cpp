@@ -23,14 +23,9 @@ Paleta::Paleta(int tamanho) {
 }
 
 Paleta::Paleta(const std::string& nomeArquivo) {
-  this->tamanho = 30;
+  this->tamanho = contarCoresArquivo(nomeArquivo);
   this->quantidade = 0;
   this->cores = new Cor[this->tamanho];
-
-  int totalCores = contarCoresArquivo(nomeArquivo);
-  if (totalCores > this->tamanho) {
-    ajustarTamanho(totalCores);
-  }
 
   std::ifstream arquivo(nomeArquivo);
 
@@ -98,19 +93,4 @@ int Paleta::contarCoresArquivo(const std::string& nomeArquivo) const {
 
   arquivo.close();
   return total;
-}
-
-void Paleta::ajustarTamanho(int novoTamanho) {
-  if (novoTamanho <= this->tamanho) {
-    return;
-  }
-
-  Cor* novoCores = new Cor[novoTamanho];
-  for (int i = 0; i < this->quantidade; i++) {
-    novoCores[i] = this->cores[i];
-  }
-
-  delete[] this->cores;
-  this->cores = novoCores;
-  this->tamanho = novoTamanho;
 }

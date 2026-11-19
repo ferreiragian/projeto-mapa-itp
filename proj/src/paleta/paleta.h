@@ -66,7 +66,5 @@ public:
    */
   Cor obterCor(int indice);
 
-  void ajustarTamanho(int novoTamanho);
-
   int contarCoresArquivo(const std::string& nomeArquivo) const;
 };
